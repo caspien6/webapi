@@ -3,7 +3,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using Webstore.Controllers;
-using Webstore.Models;
+using Webstore.Data.Models;
 using Webstore.Services;
 using Xunit;
 

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Webstore.Data;
+using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Webstore.Models
+namespace Webstore.Data.Models
 {
     public partial class R0ga3cContext : IdentityDbContext<ApplicationUser>
     {
@@ -31,8 +32,6 @@ namespace Webstore.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-
             modelBuilder.Entity<Kategoria>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -107,11 +106,7 @@ namespace Webstore.Models
 
                 entity.Property(e => e.KategoriaId).HasColumnName("KategoriaID");
 
-                entity.Property(e => e.KepUrl)
-                    .HasColumnName("KepURL")
-                    .HasColumnType("image");
-
-                entity.Property(e => e.Leiras).HasColumnType("xml");
+                entity.Property(e => e.KepUrl).HasMaxLength(200);
 
                 entity.Property(e => e.Nev).HasMaxLength(50);
 
@@ -141,8 +136,6 @@ namespace Webstore.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
-
-            
         }
     }
 }

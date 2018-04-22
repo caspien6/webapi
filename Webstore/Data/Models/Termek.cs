@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Webstore.Models
+namespace Webstore.Data.Models
 {
     public partial class Termek
     {
@@ -16,8 +16,8 @@ namespace Webstore.Models
         public int? Raktarkeszlet { get; set; }
         public int? KategoriaId { get; set; }
         public string Leiras { get; set; }
-        public byte[] KepUrl { get; set; }
         public int Views { get; set; }
+        public string KepUrl { get; set; }
 
         public Kategoria Kategoria { get; set; }
         public ICollection<KosarTetel> KosarTetel { get; set; }

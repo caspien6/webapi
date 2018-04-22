@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Webstore.Models
+namespace Webstore.Data.Models
 {
     public partial class Vevo
     {

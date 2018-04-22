@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Webstore.Models
+namespace Webstore.Data.Models
 {
     public partial class Kategoria
     {
@@ -16,11 +15,8 @@ namespace Webstore.Models
         public string Nev { get; set; }
         public int? Alkategoria { get; set; }
 
-        [JsonIgnore]
         public Kategoria AlkategoriaNavigation { get; set; }
-        [JsonIgnore]
         public ICollection<Kategoria> InverseAlkategoriaNavigation { get; set; }
-        [JsonIgnore]
         public ICollection<Termek> Termek { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Webstore.Models;
+using Webstore.Data.Models;
 
 namespace Webstore.Data.Migrations
 {
@@ -127,7 +127,7 @@ namespace Webstore.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Webstore.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Webstore.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -186,7 +186,7 @@ namespace Webstore.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Webstore.Models.ApplicationUser")
+                    b.HasOne("Webstore.Data.Models.ApplicationUser")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -194,7 +194,7 @@ namespace Webstore.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Webstore.Models.ApplicationUser")
+                    b.HasOne("Webstore.Data.Models.ApplicationUser")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -207,7 +207,7 @@ namespace Webstore.Data.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Webstore.Models.ApplicationUser")
+                    b.HasOne("Webstore.Data.Models.ApplicationUser")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

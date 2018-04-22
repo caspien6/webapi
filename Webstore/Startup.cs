@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Webstore.Data;
 using Webstore.Services;
-using Webstore.Models;
+using Webstore.Data.Models;
 
 namespace Webstore
 {
