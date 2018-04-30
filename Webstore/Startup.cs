@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Webstore.Data;
 using Webstore.Services;
 using Webstore.Data.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Webstore
 {
@@ -78,6 +79,12 @@ namespace Webstore
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
 
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.AddSingleton<IEmailSender, EmailSender>();
@@ -100,6 +107,14 @@ namespace Webstore
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc();
         }

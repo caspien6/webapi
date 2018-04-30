@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Webstore.Data.Models;
 using Webstore.Services;
 
 namespace Webstore.Controllers
@@ -16,8 +17,13 @@ namespace Webstore.Controllers
             _db = db;
         }
 
+        /// <summary>
+        /// Az összes megtalálható terméket visszaadja
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Termek
         [HttpGet]
+        [ProducesResponseType(typeof(Termek[]), 200)]
         public IActionResult Index()
         {
             return Ok(_db.GetAll());
@@ -71,6 +77,7 @@ namespace Webstore.Controllers
 
 
         [Route("/error")]
+        [HttpGet]
         public IActionResult Index2()
         {
             return StatusCode(StatusCodes.Status500InternalServerError, "Hibaa");
