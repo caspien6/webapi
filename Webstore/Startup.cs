@@ -79,7 +79,7 @@ namespace Webstore
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
 
-
+           
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });

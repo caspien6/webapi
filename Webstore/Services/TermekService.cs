@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webstore.Data.Models;
+using Webstore.OwnExceptions;
 
 namespace Webstore.Services
 {
@@ -26,6 +27,10 @@ namespace Webstore.Services
                 var query = from t in db.Termek
                             where t.Id == id
                             select t;
+                if (query.ToArray().Length == 0)
+                {
+                    throw new EntityNotFoundException(id.ToString());
+                }
                 return query.ToList();
             }
         }
@@ -37,6 +42,10 @@ namespace Webstore.Services
                 var query = from t in db.Termek
                             where t.Nev.Contains( name)
                             select t;
+                if (query.ToArray().Length == 0)
+                {
+                    throw new EntityNotFoundException(name.ToString());
+                }
                 return query.ToList();
             }
         }

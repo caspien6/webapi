@@ -22,7 +22,7 @@ namespace XUnitTest
             mockDependency.Setup(x =>  x.GetByName(name)).Throws(new Exception("Hiba"));
 
             
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult)controller.Get(name);
             Assert.IsType<NotFoundObjectResult>(result);
@@ -40,7 +40,7 @@ namespace XUnitTest
             });
 
             // create thing being tested with a mock dependency
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult)controller.Get(name);
             Assert.IsType<OkObjectResult>(result);
@@ -54,7 +54,7 @@ namespace XUnitTest
             mockDependency.Setup(x => x.GetById(1)).Throws(new Exception("Hiba"));
 
             // create thing being tested with a mock dependency
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult)controller.Get(1);
             Assert.IsType<NotFoundObjectResult>(result);
@@ -72,7 +72,7 @@ namespace XUnitTest
             });
 
             // create thing being tested with a mock dependency
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult)controller.Get(id);
             Assert.IsType<OkObjectResult>(result);
@@ -88,7 +88,7 @@ namespace XUnitTest
             });
 
             
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult) controller.Get();
             Assert.IsType<OkObjectResult>(result);
@@ -103,7 +103,7 @@ namespace XUnitTest
             mockDependency.Setup(x => x.GetAll()).Throws(new Exception());
 
             // create thing being tested with a mock dependency
-            var controller = new KategoryController(mockDependency.Object);
+            var controller = new CategoryController(mockDependency.Object);
 
             ActionResult result = (ActionResult)controller.Get();
             Assert.IsType<StatusCodeResult>(result);

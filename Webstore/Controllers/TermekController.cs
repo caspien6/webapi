@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Webstore.Data.Models;
+using Webstore.OwnExceptions;
 using Webstore.Services;
 
 namespace Webstore.Controllers
@@ -11,10 +14,12 @@ namespace Webstore.Controllers
     public class TermekController : Controller
     {
         private ITermekService _db;
+        private readonly ILogger _logger;
 
-        public TermekController(ITermekService db)
+        public TermekController(ITermekService db , ILogger<TermekController> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         /// <summary>
@@ -31,48 +36,80 @@ namespace Webstore.Controllers
 
         // GET: api/Termek/1
         [HttpGet("{id}")]
-        public IActionResult Details(int id)
+        [ProducesResponseType(typeof(Termek), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult GetTermekById(int id)
         {
+            _logger.LogInformation($"Getting termek details by id: {id}");
             try
             {
                 var termek = _db.GetById(id);
                 _db.IncreaseViews(id);
+                _logger.LogInformation($"Entity found return ok", termek);
                 return Ok(termek);
             }
-            catch (Exception)
+            catch (EntityNotFoundException e)
             {
-                return NotFound();
+                _logger.LogInformation($"Entity not found!", e);
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+                return StatusCode(500);
             }
         }
 
         [HttpGet("byName")]
-        public IActionResult getTermekByName(string name)
+        [ProducesResponseType(typeof(Termek[]),200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult GetTermekByName(string name)
         {
+            _logger.LogInformation($"Getting termek details by name: {name}");
             try
             {
                 var termek = _db.GetByName(name);
+                _logger.LogInformation($"Entity found return ok", termek);
                 return Ok(termek);
             }
-            catch (Exception)
+            catch (EntityNotFoundException e)
             {
-                return NotFound();
+                _logger.LogInformation($"Entity not found!", e);
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+                return StatusCode(500);
             }
 
         }
 
         [HttpGet("byKategory")]
-        public IActionResult getTermekByKategory(int katid)
+        [ProducesResponseType(typeof(Termek[]), 200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult GetTermekByKategory(int katid)
         {
+            _logger.LogInformation($"Getting termek details by kategoria id: {katid}");
             try
             {
                 var termek = _db.GetByKategoryId(katid);
+                _logger.LogInformation($"Entity found return ok", termek);
                 return Ok(termek);
             }
-            catch (Exception)
+            catch (EntityNotFoundException e)
             {
-                return NotFound();
+                _logger.LogInformation($"Entity not found!", e);
+                return NotFound(e.Message);
             }
-
+            catch (Exception e)
+            {
+                _logger.LogError(e.StackTrace);
+                return StatusCode(500);
+            }
         }
 
 
