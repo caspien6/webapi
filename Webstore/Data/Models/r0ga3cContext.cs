@@ -10,6 +10,7 @@ namespace Webstore.Data.Models
         public R0ga3cContext(DbContextOptions<R0ga3cContext> options)
             : base(options)
         {
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -18,7 +19,7 @@ namespace Webstore.Data.Models
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-PN7VT3L\SQLEXPRESS;Initial Catalog=r0ga3c;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-
+                
             }
         }
 

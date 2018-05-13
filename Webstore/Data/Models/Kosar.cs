@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Webstore.Data.Models
@@ -16,8 +17,11 @@ namespace Webstore.Data.Models
         public int? VevoId { get; set; }
         public int? StatuszId { get; set; }
 
+        
         public Statusz Statusz { get; set; }
+        [JsonIgnore]
         public Vevo Vevo { get; set; }
+        
         public ICollection<KosarTetel> KosarTetel { get; set; }
     }
 }

@@ -71,6 +71,8 @@ namespace Webstore
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IKategoryService, KategoryService>();
             services.AddTransient<ITermekService, TermekService>();
+            services.AddTransient<IKosarService, KosarService>();
+            services.AddTransient<IVevoService, VevoService>();
 
             services.AddMvc()
                 .AddRazorPagesOptions(options =>

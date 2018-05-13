@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Webstore.Data.Models
@@ -13,8 +14,9 @@ namespace Webstore.Data.Models
 
         public int Id { get; set; }
         public string Nev { get; set; }
-
+        [JsonIgnore]
         public ICollection<Kosar> Kosar { get; set; }
+        [JsonIgnore]
         public ICollection<KosarTetel> KosarTetel { get; set; }
     }
 }
