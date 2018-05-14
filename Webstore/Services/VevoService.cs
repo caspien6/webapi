@@ -18,12 +18,18 @@ namespace Webstore.Services
                 var queryVevo = from v in db.Vevo
                                 where v.Nev == name && v.Szamlaszam == szamlaszam
                                 select v;
+                var queryStatus = from s in db.Statusz
+                                  where s.Id == 1
+                                  select s;
 
                 bool vevoExists = queryVevo.ToArray().Length != 0;
+                var feldolgozasStatusz = queryStatus.FirstOrDefault();
                 if (!vevoExists)
                 {
                     var vevo = new Vevo { Nev = name, Szamlaszam = szamlaszam, Email = email };
+                    var kosara = new Kosar { Datum = DateTime.Now, StatuszId = 1, Statusz = feldolgozasStatusz, TelephelyId = 1, Vevo = vevo, VevoId = vevo.Id };
                     db.Add(vevo);
+                    db.Add(kosara);
                     db.SaveChanges();
                 }
                 else
