@@ -35,6 +35,16 @@ namespace Webstore
                 .AddEntityFrameworkStores<R0ga3cContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowEverything", builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials()
+                );
+            });
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
@@ -105,9 +115,9 @@ namespace Webstore
             {
                 app.UseExceptionHandler("/Error");
             }
-
+            app.UseCors("AllowEverything");
             app.UseStaticFiles();
-
+            
             app.UseAuthentication();
 
             app.UseSwagger();
