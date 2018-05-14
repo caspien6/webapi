@@ -10,15 +10,21 @@ namespace Webstore.Services
 {
     public class VevoService : IVevoService
     {
+        private R0ga3cContext _db;
+
+        public VevoService(R0ga3cContext db)
+        {
+            _db = db;
+        }
+
         public void CreateVevo(string name, string szamlaszam = "empty", string email = "empty")
         {
-            using (var db = new R0ga3cContext(new Microsoft.EntityFrameworkCore.DbContextOptions<R0ga3cContext>()))
-            {
+            
                 
-                var queryVevo = from v in db.Vevo
+                var queryVevo = from v in _db.Vevo
                                 where v.Nev == name && v.Szamlaszam == szamlaszam
                                 select v;
-                var queryStatus = from s in db.Statusz
+                var queryStatus = from s in _db.Statusz
                                   where s.Id == 1
                                   select s;
 
@@ -28,22 +34,21 @@ namespace Webstore.Services
                 {
                     var vevo = new Vevo { Nev = name, Szamlaszam = szamlaszam, Email = email };
                     var kosara = new Kosar { Datum = DateTime.Now, StatuszId = 1, Statusz = feldolgozasStatusz, TelephelyId = 1, Vevo = vevo, VevoId = vevo.Id };
-                    db.Add(vevo);
-                    db.Add(kosara);
-                    db.SaveChanges();
+                    _db.Add(vevo);
+                    _db.Add(kosara);
+                    _db.SaveChanges();
                 }
                 else
                 {
                     throw new EntityAlreadyExistsException(name);
                 }
-            }
+            
         }
 
         public Vevo FindVevo(string name)
         {
-            using (var db = new R0ga3cContext(new Microsoft.EntityFrameworkCore.DbContextOptions<R0ga3cContext>()))
-            {
-                var queryVevo = from v in db.Vevo
+            
+                var queryVevo = from v in _db.Vevo
                                 where v.Nev.Contains(name)
                                 select v;
                 var vevo = queryVevo.FirstOrDefault();
@@ -53,7 +58,7 @@ namespace Webstore.Services
                 }
                 return vevo;
 
-            }
+            
         }
     }
 }

@@ -11,12 +11,16 @@ namespace Webstore.Services
     public class KosarService : IKosarService
     {
 
-        public IEnumerable<Kosar> FindKosars(int vevoId)
+        private R0ga3cContext _db;
+
+        public KosarService(R0ga3cContext db)
         {
-            using (var db = new R0ga3cContext(new DbContextOptions<R0ga3cContext>()))
-            {
-                
-                var queryKosar = from k in db.Kosar.Include(nameof(KosarTetel)).Include(nameof(Statusz))
+            _db = db;
+        }
+
+        public IEnumerable<Kosar> FindKosars(int vevoId)
+        {               
+                var queryKosar = from k in _db.Kosar.Include(nameof(KosarTetel)).Include(nameof(Statusz))
                                 where k.VevoId == vevoId
                                 select k;
                 var vevo = queryKosar.ToArray();
@@ -24,24 +28,21 @@ namespace Webstore.Services
                 {
                     throw new EntityNotFoundException(vevoId.ToString());
                 }
-                return vevo;
-
-            }
+            return vevo;
         }
 
         public void AddKosarTetel(int kosarId, Termek termek, int mennyiseg)
         {
-            using (var db = new R0ga3cContext(new DbContextOptions<R0ga3cContext>()))
-            {
-                var queryKosar = from k in db.Kosar
+            
+                var queryKosar = from k in _db.Kosar
                                 where k.Id == kosarId
                                 select k;
 
-                var queryTermek = from t in db.Termek
+                var queryTermek = from t in _db.Termek
                                   where t.Nev.Equals(termek.Nev)
                                   select t;
 
-                var queryStatus = from s in db.Statusz
+                var queryStatus = from s in _db.Statusz
                                   where s.Id == 1
                                   select s;
 
@@ -69,9 +70,9 @@ namespace Webstore.Services
                     TermekId = termek.Id
                 };
 
-                db.Add(kosartetel);
-                db.SaveChanges();
-            }
+                _db.Add(kosartetel);
+                _db.SaveChanges();
+            
         }
     }
 }
