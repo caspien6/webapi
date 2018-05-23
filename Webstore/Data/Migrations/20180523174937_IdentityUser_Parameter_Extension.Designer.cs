@@ -11,9 +11,10 @@ using Webstore.Data.Models;
 namespace Webstore.Data.Migrations
 {
     [DbContext(typeof(R0ga3cContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180523174937_IdentityUser_Parameter_Extension")]
+    partial class IdentityUser_Parameter_Extension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -11,7 +11,7 @@ namespace XUnitTest
 {
     public class KategoryControllerTest
     {
-
+        /*
         [Theory]
         [InlineData("Ede")]
         [InlineData("")]
@@ -110,6 +110,6 @@ namespace XUnitTest
             Assert.Equal(500, (int)((StatusCodeResult)result).StatusCode);
 
         }
-
+        */
     }
 }

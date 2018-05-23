@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Webstore.Utility.SwaggerHelper;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using AutoMapper;
+using Webstore.ViewModels.Mapping;
 
 namespace Webstore
 {
@@ -32,6 +34,7 @@ namespace Webstore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddDbContext<R0ga3cContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -81,18 +84,20 @@ namespace Webstore
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
+            
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IKategoryService, KategoryService>();
             services.AddTransient<ITermekService, TermekService>();
             services.AddTransient<IKosarService, KosarService>();
             services.AddTransient<IVevoService, VevoService>();
+            
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
+            services.AddAutoMapper();
 
             services.AddApiVersioning();
             services.AddSwaggerGen(c =>

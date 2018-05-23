@@ -17,6 +17,9 @@ namespace Webstore.Data.Models
         public string Jelszo { get; set; }
         public string Email { get; set; }
 
+        public string IdentityId { get; set; }
+        public ApplicationUser Identity { get; set; }
+
         public ICollection<Kosar> Kosar { get; set; }
     }
 }
