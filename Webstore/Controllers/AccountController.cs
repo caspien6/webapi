@@ -9,7 +9,10 @@ using Webstore.Data;
 
 namespace Webstore.Controllers
 {
-    [Route("[controller]/[action]")]
+    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
+    [Produces("application/json")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

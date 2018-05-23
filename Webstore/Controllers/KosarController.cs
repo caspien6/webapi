@@ -10,8 +10,10 @@ using Webstore.Services;
 
 namespace Webstore.Controllers
 {
+    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/Kosar")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class KosarController : Controller
     {
         private IKosarService _kosarService;

@@ -13,6 +13,10 @@ using Webstore.Data;
 using Webstore.Services;
 using Webstore.Data.Models;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.Mvc;
+using Webstore.Utility.SwaggerHelper;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Webstore
 {
@@ -83,7 +87,6 @@ namespace Webstore
             services.AddTransient<ITermekService, TermekService>();
             services.AddTransient<IKosarService, KosarService>();
             services.AddTransient<IVevoService, VevoService>();
-
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
@@ -91,11 +94,47 @@ namespace Webstore
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
 
-           
+            services.AddApiVersioning();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.DocInclusionPredicate((version, apiDescription) =>
+                {
+                    bool controller;
+                    var actionApiVersionModel = apiDescription.ActionDescriptor?.GetApiVersion();
+                    // would mean this action is unversioned and should be included everywhere
+                    if (actionApiVersionModel == null)
+                    {
+                        controller =  true;
+                    }
+                    else if (actionApiVersionModel.DeclaredApiVersions.Any())
+                    {
+                        controller = actionApiVersionModel.DeclaredApiVersions.Any(v => $"v{v.ToString()}" == version);
+                    }
+                    controller = actionApiVersionModel.ImplementedApiVersions.Any(v => $"v{v.ToString()}" == version);
+
+                    var values = apiDescription.RelativePath
+                        .Split('/')
+                        .Skip(2);
+
+                    apiDescription.RelativePath = "api/" + version + "/" + string.Join("/", values);
+
+                    var versionParameter = apiDescription.ParameterDescriptions
+                        .SingleOrDefault(p => p.Name == "version");
+
+                    if (versionParameter != null)
+                        apiDescription.ParameterDescriptions.Remove(versionParameter);
+
+                    foreach (var parameter in apiDescription.ParameterDescriptions)
+                        parameter.Name = char.ToLowerInvariant(parameter.Name[0]) + parameter.Name.Substring(1);
+
+                    return controller;
+                });
+
+                c.SwaggerDoc("v1.0", new Info { Title = "My API V1.0", Version = "v1.0" });
+                c.SwaggerDoc("v2.0", new Info { Title = "My API V2.0", Version = "v2.0" });
+                c.OperationFilter<SwaggerDefaultValues>();
             });
+            
 
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
@@ -121,11 +160,13 @@ namespace Webstore
             app.UseAuthentication();
             
             app.UseSwagger();
-
+            
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                
+                c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "My API V1.0");
+                c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "My API V2.0");
             });
 
             app.UseMvc();

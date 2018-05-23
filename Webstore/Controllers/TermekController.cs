@@ -7,10 +7,14 @@ using Webstore.Data.Models;
 using Webstore.OwnExceptions;
 using Webstore.Services;
 
+
 namespace Webstore.Controllers
 {
+
+    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/Termek")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class TermekController : Controller
     {
         private ITermekService _db;
@@ -110,14 +114,6 @@ namespace Webstore.Controllers
                 _logger.LogError(e.StackTrace);
                 return StatusCode(500);
             }
-        }
-
-
-        [Route("/error")]
-        [HttpGet]
-        public IActionResult Index2()
-        {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Hibaa");
         }
         
     }

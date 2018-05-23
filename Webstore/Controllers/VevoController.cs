@@ -12,8 +12,10 @@ using Webstore.Services;
 
 namespace Webstore.Controllers
 {
+    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/Vevo")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class VevoController : Controller
     {
         private IVevoService _vevoService;

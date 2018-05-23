@@ -11,8 +11,10 @@ using Webstore.Services;
 
 namespace Webstore.Controllers
 {
-    
-    [Route("api/Kategory")]
+    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
+    [Produces("application/json")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class CategoryController : Controller
     {
         private IKategoryService _db;
