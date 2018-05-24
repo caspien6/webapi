@@ -15,7 +15,7 @@ namespace Webstore.Controllers
     [ApiVersion("2.0")]
     [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
