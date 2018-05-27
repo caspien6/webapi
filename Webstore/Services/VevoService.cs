@@ -17,10 +17,8 @@ namespace Webstore.Services
             _db = db;
         }
 
-        public void CreateVevo(string name, string szamlaszam = "empty", string email = "empty")
+        public async void CreateVevoAsync(string identityId, string name, string password, string loginEmail, string szamlaszam = "empty")
         {
-            
-                
                 var queryVevo = from v in _db.Vevo
                                 where v.Nev == name && v.Szamlaszam == szamlaszam
                                 select v;
@@ -30,31 +28,36 @@ namespace Webstore.Services
 
                 bool vevoExists = queryVevo.ToArray().Length != 0;
                 var feldolgozasStatusz = queryStatus.FirstOrDefault();
+            
                 if (!vevoExists)
                 {
-                    var vevo = new Vevo { Nev = name, Szamlaszam = szamlaszam, Email = email };
-                    var kosara = new Kosar { Datum = DateTime.Now, StatuszId = 1, Statusz = feldolgozasStatusz, TelephelyId = 1, Vevo = vevo, VevoId = vevo.Id };
-                    _db.Add(vevo);
-                    _db.Add(kosara);
-                    _db.SaveChanges();
+                    var vevo = new Vevo { IdentityId = identityId, Nev = name, Jelszo = password, Login = loginEmail, Szamlaszam = szamlaszam, Email = loginEmail };
+                    var kosara = new Kosar { Datum = DateTime.Now, StatuszId = feldolgozasStatusz.Id, VevoId = vevo.Id, Vevo = vevo };
+                    await _db.AddAsync(vevo);
+                    await _db.AddAsync(kosara);
+                    await _db.SaveChangesAsync();
                 }
                 else
                 {
+
                     throw new EntityAlreadyExistsException(name);
                 }
             
+            
+                
+            
         }
 
-        public Vevo FindVevo(string name)
+        public Vevo FindVevo(string username)
         {
             
-                var queryVevo = from v in _db.Vevo
-                                where v.Nev.Contains(name)
+                var queryVevo = from v in _db.Vevo.Include(vev => vev.Kosar)
+                                where v.Email.Contains(username)
                                 select v;
                 var vevo = queryVevo.FirstOrDefault();
                 if (vevo == null)
                 {
-                    throw new EntityNotFoundException(name);
+                    throw new EntityNotFoundException(username);
                 }
                 return vevo;
 

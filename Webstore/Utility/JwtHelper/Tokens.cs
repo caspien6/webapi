@@ -10,9 +10,9 @@ namespace Webstore.Utility.JwtHelper
 {
     public class Tokens
     {
-        public static async Task<object> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings)
+        public static async Task<JwtScheme> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings)
         {
-            var response = new
+            var response = new JwtScheme
             {
                 id = identity.Claims.Single(c => c.Type == "id").Value,
                 auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),

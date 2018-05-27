@@ -33,6 +33,8 @@ namespace Webstore.Controllers
 
         // POST api/auth/login
         [HttpPost("login")]
+        [ProducesResponseType(typeof(JwtScheme), 200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Post([FromBody]CredentialsViewModel credentials)
         {
             if (!ModelState.IsValid)

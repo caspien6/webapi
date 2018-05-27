@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ using Webstore.Services;
 
 namespace Webstore.Controllers
 {
+    [Authorize(Policy = "ApiUser")]
     [ApiVersion("2.0")]
     [ApiVersion("1.0")]
     [Produces("application/json")]
@@ -49,27 +51,6 @@ namespace Webstore.Controllers
             }
         }
 
-        [HttpPost("name={name}&email={email}&szamlasz={szamla}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public IActionResult PostVevo(string name, string email, string szamla)
-        {
-            try
-            {
-                _vevoService.CreateVevo(name, email, szamla);
-                return Ok();
-            }
-            catch (EntityAlreadyExistsException e)
-            {
-                return BadRequest(e.Message); 
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.StackTrace);
-                return StatusCode(500);
-            }
-        }
 
     }
 }

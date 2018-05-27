@@ -111,6 +111,7 @@ namespace Webstore
             services.AddApiVersioning();
             services.AddSwaggerGen(c =>
             {
+                
                 c.DocInclusionPredicate((version, apiDescription) =>
                 {
                     bool controller;
@@ -150,6 +151,16 @@ namespace Webstore
                 c.SwaggerDoc("v1.0", new Info { Title = "My API V1.0", Version = "v1.0" });
                 c.SwaggerDoc("v2.0", new Info { Title = "My API V2.0", Version = "v2.0" });
                 c.OperationFilter<SwaggerDefaultValues>();
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
+                {
+                    Description = "Authorization header using the Bearer scheme",
+                    Name = "Authorization",
+                    In = "header"
+                });
+
+                c.DocumentFilter<SwaggerSecurityRequirementsDocumentFilter>();
+
             });
 
             //jwt token config

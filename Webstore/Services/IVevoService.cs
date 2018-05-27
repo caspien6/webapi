@@ -9,6 +9,7 @@ namespace Webstore.Services
     public interface IVevoService
     {
         Vevo FindVevo(string name);
-        void CreateVevo(string name, string szamlaszam="empty", string email="empty");
+
+        void CreateVevoAsync(string identityId, string name, string password, string loginEmail, string szamlaszam = "empty");
     }
 }
