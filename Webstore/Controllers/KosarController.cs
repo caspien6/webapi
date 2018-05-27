@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Webstore.Data.Models;
 using Webstore.OwnExceptions;
@@ -18,13 +21,17 @@ namespace Webstore.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class KosarController : Controller
     {
+        private readonly ClaimsPrincipal _caller;
         private IKosarService _kosarService;
+        private R0ga3cContext _dbcontext;
         private readonly ILogger<KosarController> _logger;
 
-        public KosarController(IKosarService kosarService, ILogger<KosarController> logger)
+        public KosarController(R0ga3cContext dbcontext, IKosarService kosarService, IHttpContextAccessor httpContextAccessor, ILogger<KosarController> logger)
         {
-            _kosarService = kosarService;
+            _caller = httpContextAccessor.HttpContext.User;
+            _dbcontext = dbcontext;
             _logger = logger;
+            _kosarService = kosarService;
         }
 
         [HttpGet("byVevoId={vevoId}")]
@@ -35,8 +42,12 @@ namespace Webstore.Controllers
         {
             try
             {
-                var kosars = _kosarService.FindKosars(vevoId);
-                return Ok(kosars);
+                // retrieve the user info
+                //HttpContext.User
+                var userId = _caller.Claims.Single(c => c.Type == "id");
+                var vevo = _dbcontext.Vevo.Include(c => c.Identity).Include(c => c.Kosar).Single(c => c.Identity.Id == userId.Value);
+                var kosar = _dbcontext.Kosar.Include(k => k.KosarTetel).Where(k => k.VevoId == vevo.Id).ToArray();
+                return Ok(kosar);
             }
             catch(EntityNotFoundException e)
             {
@@ -61,7 +72,12 @@ namespace Webstore.Controllers
                 return BadRequest();
             try
             {
-                _kosarService.AddKosarTetel(kosarId, termek, mennyiseg);
+                // retrieve the user info
+                //HttpContext.User
+                var userId = _caller.Claims.Single(c => c.Type == "id");
+                var vevo = _dbcontext.Vevo.Include(c => c.Identity).Include(c => c.Kosar).Single(c => c.Identity.Id == userId.Value);
+                var kosar = _dbcontext.Kosar.Include(k => k.KosarTetel).Where(k => k.VevoId == vevo.Id).ToArray();
+                _kosarService.AddKosarTetel(kosar.ElementAt(0).Id, termek, mennyiseg);
                 return Ok();
             }
             catch (EntityNotFoundException e)

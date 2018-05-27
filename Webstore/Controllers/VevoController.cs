@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Webstore.Data.Models;
 using Webstore.OwnExceptions;
@@ -20,12 +22,14 @@ namespace Webstore.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class VevoController : Controller
     {
-        private IVevoService _vevoService;
+        private readonly ClaimsPrincipal _caller;
+        private R0ga3cContext _dbcontext;
         private readonly ILogger<VevoController> _logger;
 
-        public VevoController(IVevoService vevoService, ILogger<VevoController> logger)
+        public VevoController(R0ga3cContext dbcontext, ILogger<VevoController> logger, IHttpContextAccessor httpContextAccessor)
         {
-            _vevoService = vevoService;
+            _caller = httpContextAccessor.HttpContext.User;
+            _dbcontext = dbcontext;
             _logger = logger;
         }
 
@@ -33,11 +37,14 @@ namespace Webstore.Controllers
         [ProducesResponseType(typeof(Vevo), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public IActionResult GetVevo(string name)
+        public async Task<IActionResult> GetVevo(string name)
         {
             try
             {
-                var vevo = _vevoService.FindVevo(name);
+                // retrieve the user info
+                //HttpContext.User
+                var userId = _caller.Claims.Single(c => c.Type == "id");
+                var vevo = await _dbcontext.Vevo.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);               
                 return Ok(vevo);
             }
             catch (EntityNotFoundException e)
