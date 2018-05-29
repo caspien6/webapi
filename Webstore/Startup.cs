@@ -219,7 +219,7 @@ namespace Webstore
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
+                
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
