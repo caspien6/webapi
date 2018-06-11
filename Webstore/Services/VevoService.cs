@@ -10,6 +10,7 @@ namespace Webstore.Services
 {
     public class VevoService : IVevoService
     {
+
         private R0ga3cContext _db;
 
         public VevoService(R0ga3cContext db)

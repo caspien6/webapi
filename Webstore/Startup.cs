@@ -23,6 +23,7 @@ using Webstore.ViewModels.Mapping;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Webstore.SignalHubs;
 
 namespace Webstore
 {
@@ -59,6 +60,7 @@ namespace Webstore
                     .AllowCredentials()
                 );
             });
+            services.AddSignalR();
             services.AddSingleton<IJwtFactory, JwtFactory>();
 
             services.Configure<IdentityOptions>(options =>
@@ -228,6 +230,10 @@ namespace Webstore
                 app.UseExceptionHandler("/Error");
             }
             app.UseCors("AllowEverything");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotifyHub>("/notify");
+            });
             app.UseStaticFiles();
             
             app.UseAuthentication();

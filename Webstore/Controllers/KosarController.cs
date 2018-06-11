@@ -86,6 +86,7 @@ namespace Webstore.Controllers
             }
             catch (ProductQuantityException e)
             {
+                _logger.LogError(e.StackTrace);
                 return StatusCode(406);
             }
             catch (Exception e)
