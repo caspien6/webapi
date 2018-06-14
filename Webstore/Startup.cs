@@ -36,6 +36,7 @@ namespace Webstore
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -60,7 +61,11 @@ namespace Webstore
                     .AllowCredentials()
                 );
             });
-            services.AddSignalR();
+            services.AddSignalR(options => {
+                options.KeepAliveInterval = TimeSpan.FromSeconds(10);
+                options.HandshakeTimeout = null;
+                options.EnableDetailedErrors = true;
+            });
             services.AddSingleton<IJwtFactory, JwtFactory>();
 
             services.Configure<IdentityOptions>(options =>
